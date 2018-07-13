@@ -1,24 +1,19 @@
 #include "rooting.hpp"
-#include "debug.h"
+#include "communication.hpp"
+#include "debug.hpp"
+#include <Arduino.h>
+#include <SoftwareSerial.h>
 
 void setup()
-{
+{                
 	debug_init();
-	rooting_init();
+	com_init();
 }
 
 void loop()
 {
-	unsigned char n = 0;
-	n = rooting_rootPackets();
-	debug_blink(n);
+	com_flush();
+	debug_blink(3);
+	delay(2000);
 }
 
-int main(void)
-{
-	setup();
-	while (1) {
-		loop();
-	}
-	return 0;
-}

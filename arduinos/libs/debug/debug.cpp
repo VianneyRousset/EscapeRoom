@@ -1,4 +1,4 @@
-#include "debug.h"
+#include "debug.hpp"
 #include <Arduino.h>
 
 void debug_init(void)

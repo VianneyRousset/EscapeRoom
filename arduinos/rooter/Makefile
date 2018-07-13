@@ -7,7 +7,10 @@ ARDUINO_LIBS += array
 ARDUINO_LIBS += communication
 ARDUINO_LIBS += debug
 ARDUINO_LIBS += private
+ARDUINO_LIBS += SoftwareSerial 
 #CPP_SOURCE_FILES += /home/antonin/Documents/EscapeRoom/arduinos/includes/* 
+
+BOARD_TAG    = uno
 
 #CXXSRC += main.cpp rooting.cpp communication.cpp debug.c
 #CPPFLAGS = -I../includes -I.

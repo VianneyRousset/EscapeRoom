@@ -1,4 +1,4 @@
-#include "array.h"
+#include "array.hpp"
 #include <string.h>
 
 Queue_t queue_create(void* buffer, unsigned short N, unsigned short s)
@@ -7,7 +7,7 @@ Queue_t queue_create(void* buffer, unsigned short N, unsigned short s)
 	return q;
 }
 
-int queue_push(Queue_t* q, void* data)
+int queue_push(Queue_t* q, const void* data)
 {
 	// buffer full
 	if (q->n == q->N)
