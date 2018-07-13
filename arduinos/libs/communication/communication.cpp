@@ -7,15 +7,14 @@
 
 Packet_t inputBuffer[COM_INPUT_QUEUE_N], outputBuffer[COM_OUTPUT_QUEUE_N];
 Queue_t inputQueue, outputQueue;
-SoftwareSerial serial(10,11);
 
 static unsigned char readNewPacketsFromUART(Queue_t* queue)
 {
 	Packet_t packet;
 	unsigned char n = 0;
 
-	while (serial.available() >= sizeof(packet)) {
-		if (serial.readBytes((char*) &packet, sizeof(packet)) == sizeof(packet)) {
+	while (Serial.available() >= sizeof(packet)) {
+		if (Serial.readBytes((char*) &packet, sizeof(packet)) == sizeof(packet)) {
 			n++;
 		} else {
 			;
@@ -45,8 +44,9 @@ void com_init(void)
 								sizeof(Packet_t));
 */
 	// UART
-	serial.begin(UART_BAUD_RATE);
-	while(!serial) {;}
+	Serial.begin(UART_BAUD_RATE);
+	while(!Serial) {;}
+	Serial.println("UART initialized");
 }
 
 unsigned char com_fetchPackets(void)
@@ -96,10 +96,11 @@ void com_flush(void)
 */
 void com_flush(void)
 {
-	serial.println("hello folk");
+	Serial.println("hello folk");
 	// todo: flush for non-rooter devices
-	debug_blink(1);
-	delay(2000);
+	if (Serial.available()) {
+		Serial.write(Serial.read());
+	}
 }
 //#endif
 
