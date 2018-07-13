@@ -6,6 +6,7 @@
 #define COMMUNICATION_H_
 
 #include <stdint.h>
+#include "array.hpp"
 
 typedef uint8_t Address_t;
 
@@ -23,21 +24,28 @@ typedef struct {
 	uint8_t data[14];
 } Packet_t;
 
-void com_init(void);
 
-// Get new packets in input queue and return nb of packets in input queue.
-unsigned char com_fetchPackets(void);
+class Communication {
+public:
+	Address_t src;
 
-// return nb of packets in input queue.
-unsigned char com_available(void);
+	Communication(Address_t src);
+	
+	// Get new packets in input queue and return nb of packets in input queue.
+	unsigned char fetchPackets(void);
 
-// get packet from input queue.
-Packet_t com_get(void);
+	// return nb of packets in input queue.
+	unsigned char available(void);
 
-// add packet to output queue. Return nb of packets in output queue
-unsigned char com_send(const Packet_t* packet);
+	// get packet from input queue.
+	Packet_t get(void);
 
-// send output queue (may take a while).
-void com_flush(void);
+	// add packet to output queue. Return nb of packets in output queue
+	unsigned char send(const Packet_t* packet);
+
+	// send output queue (may take a while).
+	void flush(void);
+
+};
 
 #endif
