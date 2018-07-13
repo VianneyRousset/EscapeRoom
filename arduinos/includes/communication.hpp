@@ -22,6 +22,6 @@ typedef struct {
 typedef struct {
 	Address_t dest, src;
 	
-}
+} pute;
 
 #endif
