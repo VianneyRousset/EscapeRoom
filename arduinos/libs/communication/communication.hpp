@@ -9,6 +9,14 @@
 #include "array.hpp"
 #include "config.h"
 
+typedef uint8_t Address_t;
+
+typedef struct {
+	uint8_t dest;
+	uint8_t src;
+	uint8_t data[14];
+} Packet_t;
+
 class Communication {
 public:
 	Address_t src;
@@ -25,11 +33,24 @@ public:
 	Packet_t get(void);
 
 	// add packet to output queue. Return nb of packets in output queue
-	unsigned char send(Address_t dest, const char* msg);
+	unsigned char send(const Packet_t* packet);
 
 	// send output queue (may take a while).
 	void flush(void);
 
+};
+
+class Rooter : public Communication {
+private:
+	static unsigned char readNewPacketsFromUART(Queue_t* queue);
+	static unsigned char readNewPacketsFromI2C(Queue_t* queue);
+
+public:
+	Rooter(Address_t src);
+
+	void flush(void); // return amount of flushed packets?
+
+	unsigned char rootPackets(void);
 };
 
 #endif

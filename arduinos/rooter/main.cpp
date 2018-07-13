@@ -1,4 +1,3 @@
-#include "rooter.hpp"
 #include "communication.hpp"
 #include "debug.hpp"
 #include <Arduino.h>
