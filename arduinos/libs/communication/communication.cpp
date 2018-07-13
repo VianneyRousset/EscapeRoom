@@ -1,7 +1,6 @@
 #include "communication.hpp"
-#include "private/communication.hpp"
+#include "private.hpp"
 #include "array.h"
-#include <Serial.h>
 
 Packet_t inputBuffer[COM_INPUT_QUEUE_N], outputBuffer[COM_OUTPUT_QUEUE_N];
 Queue_t inputQueue, outputQueue;

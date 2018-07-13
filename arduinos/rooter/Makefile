@@ -2,10 +2,18 @@ ARDUINO_DIR = /usr/share/arduino
 ARDMK_DIR = /usr/share/arduino
 AVR_TOOLS_DIR = /usr
 AVRDUDE_CONF = /etc/avrdude.conf
-USER_LIB_PATH := $(realpath ../includes) 
+USER_LIB_PATH := $(realpath ../libs)
+ARDUINO_LIBS += array
+ARDUINO_LIBS += communication
+ARDUINO_LIBS += debug
+ARDUINO_LIBS += private
+#CPP_SOURCE_FILES += /home/antonin/Documents/EscapeRoom/arduinos/includes/* 
 
-CXXSRC = main.cpp rooting.cpp  
-CPPFLAGS = -I../includes
+#CXXSRC += main.cpp rooting.cpp communication.cpp debug.c
+#CPPFLAGS = -I../includes -I.
+#CFLAGS = -I../includes -I.
+
+SOURCE_FOLDERS = $(realpath ../includes)
 
 include ${ARDUINO_DIR}/Arduino.mk
 
