@@ -21,18 +21,7 @@ Communication::Communication(Address_t s)
 	*/
 }
 
-unsigned char Communication::fetchPackets(void)
-{
-	//unsigned char nUART = readNewPacketsFromUART(&inputQueue);
-	//unsigned char nI2C = readNewPacketsFromI2C(&inputQueue);
-
-	//if (nUART < 0 || nI2c < 0)
-		// todo: log("inputQueue full")
-
-	return inputQueue.n;
-}
-
-unsigned char Communication::available(void)
+unsigned char Communication::pendingInputs(void)
 {
 	return inputQueue.n;
 }
@@ -47,14 +36,6 @@ Packet_t Communication::get(void)
 
 }
 
-unsigned char Communication::send(const Packet_t* packet)
-{
-	queue_push(&outputQueue, packet);
-		// if < 0
-		// todo: log("full output queue")
-	return outputQueue.n;
-}
-
 
 Rooter::Rooter(Address_t src) : Communication(src)
 {
@@ -62,20 +43,8 @@ Rooter::Rooter(Address_t src) : Communication(src)
 	Serial.begin(UART_BAUD_RATE);
 	while(!Serial) {;}
 	Serial.println("UART initialized");
-}
 
-unsigned char Rooter::rootPackets(void)
-{
-	Packet_t packet;
-	unsigned char n = 0;
-	while (fetchPackets() > 0) {
-		packet = get();
-		send(&packet);
-		flush();
-		n++;
-	}
-
-	return n;
+	// todo i2c
 }
 
 static unsigned char Rooter::readNewPacketsFromUART(Queue_t* queue)
@@ -103,12 +72,58 @@ static unsigned char Rooter::readNewPacketsFromI2C(Queue_t* queue)
 	return n;
 }
 
-void Rooter::flush(void)
+unsigned char Rooter::fetchPackets(void)
 {
-	Serial.println("hello folk");
-	// todo: flush for non-rooter devices
-	if (Serial.available()) {
-		Serial.write(Serial.read());
+	unsigned char nUART = readNewPacketsFromUART(&inputQueue);
+	//unsigned char nI2C = readNewPacketsFromI2C(&inputQueue);
+
+	//if (nUART < 0 || nI2c < 0)
+		// todo: log("inputQueue full")
+
+	return inputQueue.n;
+}
+
+size_t Rooter::send(const Packet_t* packet)
+{
+	switch(packet->dest) {
+	case COM_ADDRESS_COMPUTER:
+		if (Serial.availableForWrite())
+			return Serial.write("todo");
+		return 0;
+	default:
+		return 1; //todo, i2c...
+	}
+}
+
+
+Module::Module(Address_t src) : Communication(src)
+{
+	// todo i2c
+}
+
+static unsigned char Module::readNewPacketsFromI2C(Queue_t* queue)
+{
+	Packet_t packet;
+	unsigned char n = 0;
+	// todo
+	return n;
+}
+
+unsigned char Module::fetchPackets(void)
+{
+	unsigned char n = readNewPacketsFromI2C(&inputQueue);
+
+	//if (nUART < 0 || nI2c < 0)
+		// todo: log("inputQueue full")
+
+	return n;
+}
+
+size_t Module::send(const Packet_t* packet)
+{
+	switch(packet->dest) {
+	default:
+		return 1; //todo, i2c...
 	}
 }
 

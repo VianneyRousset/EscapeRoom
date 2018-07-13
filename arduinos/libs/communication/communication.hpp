@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include "array.hpp"
 #include "config.h"
+#include <string.h>
 
 typedef uint8_t Address_t;
 
@@ -24,33 +25,40 @@ public:
 	Communication(Address_t src);
 	
 	// Get new packets in input queue and return nb of packets in input queue.
-	unsigned char fetchPackets(void);
+	virtual unsigned char fetchPackets(void);
 
 	// return nb of packets in input queue.
-	unsigned char available(void);
+	unsigned char pendingInputs(void);
 
 	// get packet from input queue.
 	Packet_t get(void);
 
-	// add packet to output queue. Return nb of packets in output queue
-	unsigned char send(const Packet_t* packet);
-
-	// send output queue (may take a while).
-	void flush(void);
-
+	// send packet and return nb of byte written 
+	virtual size_t send(const Packet_t* packet);
 };
+
 
 class Rooter : public Communication {
 private:
-	static unsigned char readNewPacketsFromUART(Queue_t* queue);
-	static unsigned char readNewPacketsFromI2C(Queue_t* queue);
+	unsigned char readNewPacketsFromUART(Queue_t* queue);
+	unsigned char readNewPacketsFromI2C(Queue_t* queue);
 
 public:
 	Rooter(Address_t src);
+	unsigned char fetchPackets(void);
+	size_t send(const Packet_t* packet);
+};
 
-	void flush(void); // return amount of flushed packets?
 
-	unsigned char rootPackets(void);
+class Module : public Communication {
+private:
+	unsigned char readNewPacketsFromI2C(Queue_t* queue);
+
+public:
+	Module(Address_t src);
+	unsigned char pendingOutputs(void);
+	unsigned char fetchPackets(void);
+	size_t send(const Packet_t* packet);
 };
 
 #endif
