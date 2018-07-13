@@ -5,7 +5,10 @@
 #ifndef COMMUNICATION_H_
 #define COMMUNICATION_H_
 
-typedef char Address_t;
+#include <stdint.h>
+
+typedef uint8_t Address_t;
+
 typedef enum : Address_t {
 	COM_ADDRESS_ROOTER     = 0x00,
 	COM_ADDRESS_COMPUTER   = 0x01,
@@ -15,13 +18,26 @@ typedef enum : Address_t {
 } com_Address_e;
 
 typedef struct {
-	unsigned char i, n;
+	uint8_t dest;
+	uint8_t src;
+	uint8_t data[14];
+} Packet_t;
 
-} Fragment_t;
+void com_init(void);
 
-typedef struct {
-	Address_t dest, src;
-	
-}
+// Get new packets in input queue and return nb of packets in input queue.
+unsigned char com_fetchPackets(void);
+
+// return nb of packets in input queue.
+unsigned char com_available(void);
+
+// get packet from input queue.
+Packet_t com_get(void);
+
+// add packet to output queue. Return nb of packets in output queue
+unsigned char com_send(const Packet_t* packet);
+
+// send output queue (may take a while).
+void com_flush(void);
 
 #endif

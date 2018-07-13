@@ -2,7 +2,7 @@
 #
 #						       +---------+
 #					          ---> |  clock  |
-#	+----------+   USB   +--------+	   I2C   /     +---------+
+#	+----------+   UART  +--------+	   I2C   /     +---------+
 #	| computer | <-----> | rooter | <------------> | puzzle1 |
 #	+----------+         +--------+	         \     +---------+
 #						  ---> | puzzle2 |
@@ -39,7 +39,10 @@ cPublicHeaderFile = 'arduinos/includes/communication.hpp'
 cPrivateHeaderFile = 'arduinos/includes/private/communication.hpp'
 
 # packet
-fragmentSize = 8; # in bytes
+headerSize = 2; # in bytes
+dataSize = 14; # in bytes
+inputQueueSize = 64 # in nb of packets
+outputQueueSize = 64 # in nb of packets
 
 # commands
 commands = [  #  NAME               CODE    DESCRIPTION
@@ -58,9 +61,9 @@ addresses = [ #  NAME               ADDRESS         I2C_ADDRESS
                 ('puzzle1',         0x03,           0x03),
                 ('puzzle2',         0x04,           0x04)]
 
-# USB
-usbTimeout = 1000 # in ms
-usbBaudRate = 9600
+# UART 
+uartTimeout = 1000 # in ms
+uartBaudRate = 9600
 
 # I2C
 i2cBaudRate = 9600
