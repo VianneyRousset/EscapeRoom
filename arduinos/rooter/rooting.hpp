@@ -3,8 +3,6 @@
 
 void rooting_init(void);
 
-void rooting_pullRequests(void);
-void rooting_psuhRequests(void);
-
+unsigned char rooting_rootPackets(void);
 
 #endif
