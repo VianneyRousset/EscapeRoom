@@ -1,6 +1,6 @@
 build-uno/rooter.cpp.o: rooter.cpp rooter.hpp \
- /home/antonin/Documents/EscapeRoom/arduinos/libs/communication/communication.hpp \
- /home/antonin/Documents/EscapeRoom/arduinos/libs/array/array.hpp \
+ /home/vianney/documents/projects/escapeRoom/code/arduinos/libs/communication/communication.hpp \
+ /home/vianney/documents/projects/escapeRoom/code/arduinos/libs/array/array.hpp \
  /usr/share/arduino/hardware/arduino/avr/libraries/SoftwareSerial/src/SoftwareSerial.h \
  /usr/share/arduino/hardware/arduino/avr/cores/arduino/Stream.h \
  /usr/share/arduino/hardware/arduino/avr/cores/arduino/Print.h \
