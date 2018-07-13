@@ -11,8 +11,8 @@ HEADER_TEXT = '''
 def configureCommunication():
 
     # public header file
-    with open(com.cPublicHeaderFile, 'w') as f:
-        print('Writting "{}"'.format(com.cPublicHeaderFile))
+    with open(com.headerFile, 'w') as f:
+        print('Writting "{}"'.format(com.headerFile))
 
         # header
         f.write(HEADER_TEXT)
@@ -33,25 +33,6 @@ def configureCommunication():
                     p['name'].upper(), p['address']) for p in com.addresses]
         f.write(',\n'.join(s))
         f.write('\n} com_Address_e;\n')
-        f.write('\n')
-
-        # footer
-        f.write('#endif\n')
-
-
-    # private header file
-    with open(com.cPrivateHeaderFile, 'w') as f:
-        print('Writting "{}"'.format(com.cPrivateHeaderFile))
-
-        # header
-        f.write(HEADER_TEXT)
-        f.write('\n')
-        f.write('#ifndef COMMUNICATION_PRIVATE_H_\n')
-        f.write('#define COMMUNICATION_PRIVATE_H_\n')
-        f.write('\n')
-
-        # includes
-        f.write('#include <stdint.h>\n')
         f.write('\n')
 
         # packets

@@ -7,23 +7,7 @@
 
 #include <stdint.h>
 #include "array.hpp"
-
-typedef uint8_t Address_t;
-
-typedef enum : Address_t {
-	COM_ADDRESS_ROOTER     = 0x00,
-	COM_ADDRESS_COMPUTER   = 0x01,
-	COM_ADDRESS_CLOCK      = 0x02,
-	COM_ADDRESS_PUZZLE1    = 0x03,
-	COM_ADDRESS_PUZZLE2    = 0x04
-} com_Address_e;
-
-typedef struct {
-	uint8_t dest;
-	uint8_t src;
-	uint8_t data[14];
-} Packet_t;
-
+#include "config.h"
 
 class Communication {
 public:
@@ -41,7 +25,7 @@ public:
 	Packet_t get(void);
 
 	// add packet to output queue. Return nb of packets in output queue
-	unsigned char send(const Packet_t* packet);
+	unsigned char send(Address_t dest, const char* msg);
 
 	// send output queue (may take a while).
 	void flush(void);

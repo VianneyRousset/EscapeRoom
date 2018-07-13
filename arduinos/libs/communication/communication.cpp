@@ -1,5 +1,4 @@
 #include "communication.hpp"
-#include "private.hpp"
 #include "array.hpp"
 #include <SoftwareSerial.h>
 #include "debug.hpp"
@@ -48,7 +47,7 @@ Packet_t Communication::get(void)
 
 }
 
-unsigned char Communication::send(const Packet_t* packet)
+unsigned char Communication::send(Address_t dest, const char* msg)
 {
 	queue_push(&outputQueue, packet);
 		// if < 0
