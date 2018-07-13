@@ -35,8 +35,8 @@
 #   store it.
 #
 
-cPublicHeaderFile = 'arduinos/includes/communication/communication.hpp'
-cPrivateHeaderFile = 'arduinos/includes/communication/private.hpp'
+cPublicHeaderFile = 'arduinos/libs/communication/communication.hpp'
+cPrivateHeaderFile = 'arduinos/libs/communication/private.hpp'
 
 # packet
 headerSize = 2; # in bytes

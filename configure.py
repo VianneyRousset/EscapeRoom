@@ -104,7 +104,8 @@ def configureCommunication():
                 n = p['address']
                 i2cAddresses[n] = p['i2c_address']
 
-        s = 'static const char I2C_ADDRESSES[128] = {\t'
+        s = 'static const char I2C_ADDRESSES[{}]'.format(len(i2cAddresses))
+        s += '{\t'
         for n,p in enumerate(i2cAddresses):
             if n%8 == 0:
                 s += '\n' + '\t'*3
