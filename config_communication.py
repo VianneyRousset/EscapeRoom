@@ -35,12 +35,9 @@
 #   store it.
 #
 
-cPublicHeaderFile = 'arduinos/libs/communication/communication.hpp'
-cPrivateHeaderFile = 'arduinos/libs/communication/private.hpp'
+headerFile = 'arduinos/libs/communication/config.h'
 
 # packet
-headerSize = 2; # in bytes
-dataSize = 14; # in bytes
 inputQueueSize = 64 # in nb of packets
 outputQueueSize = 64 # in nb of packets
 

@@ -17,8 +17,8 @@ def configureCommunication():
         # header
         f.write(HEADER_TEXT)
         f.write('\n')
-        f.write('#ifndef COMMUNICATION_H_\n')
-        f.write('#define COMMUNICATION_H_\n')
+        f.write('#ifndef COMMUNICATION_CONFIG_H_\n')
+        f.write('#define COMMUNICATION_CONFIG_H_\n')
         f.write('\n')
 
         # includes
@@ -33,35 +33,6 @@ def configureCommunication():
                     p['name'].upper(), p['address']) for p in com.addresses]
         f.write(',\n'.join(s))
         f.write('\n} com_Address_e;\n')
-        f.write('\n')
-
-        # packet
-        f.write('typedef struct {\n')
-        f.write('\tuint8_t dest;\n')
-        f.write('\tuint8_t src;\n')
-        f.write('\tuint8_t data[{}];\n'.format(com.dataSize))
-        f.write('} Packet_t;\n')
-        f.write('\n')
-
-        # functions
-        f.write('void com_init(void);\n')
-        f.write('\n')
-        f.write('// Get new packets in input queue and ')
-        f.write('return nb of packets in input queue.\n')
-        f.write('unsigned char com_fetchPackets(void);\n')
-        f.write('\n')
-        f.write('// return nb of packets in input queue.\n')
-        f.write('unsigned char com_available(void);\n')
-        f.write('\n')
-        f.write('// get packet from input queue.\n')
-        f.write('Packet_t com_get(void);\n')
-        f.write('\n')
-        f.write('// add packet to output queue. ')
-        f.write('Return nb of packets in output queue\n')
-        f.write('unsigned char com_send(const Packet_t* packet);\n')
-        f.write('\n')
-        f.write('// send output queue (may take a while).\n')
-        f.write('void com_flush(void);\n')
         f.write('\n')
 
         # footer
