@@ -9,11 +9,10 @@ Rooter rooter(COM_ADDRESS_ROOTER);
 void setup()
 {                 
 	debug_init();
-//	com_init();
 } 
 
 void loop()
 {  
-//	com_flush();
+	rooter.flush();
 }
 
