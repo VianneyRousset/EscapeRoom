@@ -54,13 +54,3 @@ unsigned char Communication::send(Address_t dest, const char* msg)
 		// todo: log("full output queue")
 	return outputQueue.n;
 }
-
-void Communication::flush(void)
-{
-	Serial.println("hello folk");
-	// todo: flush for non-rooter devices
-	if (Serial.available()) {
-		Serial.write(Serial.read());
-	}
-}
-

@@ -53,3 +53,12 @@ static unsigned char Rooter::readNewPacketsFromI2C(Queue_t* queue)
 	return n;
 }
 
+void Rooter::flush(void)
+{
+	Serial.println("hello folk");
+	// todo: flush for non-rooter devices
+	if (Serial.available()) {
+		Serial.write(Serial.read());
+	}
+}
+
