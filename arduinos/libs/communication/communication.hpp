@@ -8,6 +8,15 @@
 #include <stdint.h>
 #include "array.hpp"
 #include "config.h"
+#include <string.h>
+
+typedef uint8_t Address_t;
+
+typedef struct {
+	uint8_t dest;
+	uint8_t src;
+	uint8_t data[14];
+} Packet_t;
 
 struct{
 	Address_t dest, src;
@@ -21,21 +30,40 @@ public:
 	Communication(Address_t src);
 	
 	// Get new packets in input queue and return nb of packets in input queue.
-	unsigned char fetchPackets(void);
+	virtual unsigned char fetchPackets(void);
 
 	// return nb of packets in input queue.
-	unsigned char available(void);
+	unsigned char pendingInputs(void);
 
 	// get packet from input queue.
 	Packet_t get(void);
 
+	// send packet and return nb of byte written 
+	virtual size_t send(const Packet_t* packet);
+};
 
-	// add packet to output queue. Return nb of packets in output queue
-	unsigned char send(Address_t dest, const char* msg);
 
-	// send output queue (may take a while).
-	void flush(void);
+class Rooter : public Communication {
+private:
+	unsigned char readNewPacketsFromUART(Queue_t* queue);
+	unsigned char readNewPacketsFromI2C(Queue_t* queue);
 
+public:
+	Rooter(Address_t src);
+	unsigned char fetchPackets(void);
+	size_t send(const Packet_t* packet);
+};
+
+
+class Module : public Communication {
+private:
+	unsigned char readNewPacketsFromI2C(Queue_t* queue);
+
+public:
+	Module(Address_t src);
+	unsigned char pendingOutputs(void);
+	unsigned char fetchPackets(void);
+	size_t send(const Packet_t* packet);
 };
 
 #endif
