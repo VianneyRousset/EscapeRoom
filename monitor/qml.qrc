@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Timer.qml</file>
+        <file>TimerForm.ui.qml</file>
+        <file>Board.qml</file>
+        <file>BoardForm.ui.qml</file>
+        <file>Cameras.qml</file>
+        <file>CamerasForm.ui.qml</file>
+        <file>Tree.qml</file>
+        <file>TreeForm.ui.qml</file>
+    </qresource>
+</RCC>
