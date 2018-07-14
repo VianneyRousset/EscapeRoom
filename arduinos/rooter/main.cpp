@@ -17,6 +17,7 @@ void loop()
 	if (rooter.fetchInputs() > 0 and available) {
 		packet = rooter.get();
 		available = false;
+		debug_blink(3);
 	}
 
 	// handle packet if addressed to rooter

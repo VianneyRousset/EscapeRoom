@@ -24,16 +24,16 @@ Packet_t Communication::get(void)
 
 Rooter::Rooter(Address_t addr) : Communication(addr)
 {
-	// UART
 	Serial.begin(UART_BAUD_RATE);
 	while(!Serial) {;}
 	Serial.setTimeout(READ_TIMEOUT);
+	Serial.println("UART initialized");
 }
 
 unsigned short Rooter::fetchInputs(void)
 {
 	while (Serial.available() > 0) {
-		char* str = Serial.readStringUntil('\0').c_str();
+		const char* str = Serial.readStringUntil('\0').c_str();
 		inputs.push(str);
 	}
 	return inputQueue.n;
