@@ -13,27 +13,21 @@
 typedef uint8_t Address_t;
 
 typedef struct {
-	uint8_t dest;
-	uint8_t src;
-	uint8_t data[14];
+	Address_t dest, src;
+	const char* str;
 } Packet_t;
 
-struct{
-	Address_t dest, src;
-	char* msg;
-}
-
 class Communication {
+protected:
+	StringQueue inputs;
+
 public:
-	Address_t src;
+	Address_t address;
 
 	Communication(Address_t src);
 	
-	// Get new packets in input queue and return nb of packets in input queue.
-	virtual unsigned char fetchPackets(void);
-
-	// return nb of packets in input queue.
-	unsigned char pendingInputs(void);
+	// Get new packets in input queue and return nb of byte in input queue.
+	virtual unsigned short fetchInputs(void);
 
 	// get packet from input queue.
 	Packet_t get(void);
@@ -44,25 +38,9 @@ public:
 
 
 class Rooter : public Communication {
-private:
-	unsigned char readNewPacketsFromUART(Queue_t* queue);
-	unsigned char readNewPacketsFromI2C(Queue_t* queue);
-
 public:
 	Rooter(Address_t src);
-	unsigned char fetchPackets(void);
-	size_t send(const Packet_t* packet);
-};
-
-
-class Module : public Communication {
-private:
-	unsigned char readNewPacketsFromI2C(Queue_t* queue);
-
-public:
-	Module(Address_t src);
-	unsigned char pendingOutputs(void);
-	unsigned char fetchPackets(void);
+	unsigned short fetchInputs(void);
 	size_t send(const Packet_t* packet);
 };
 

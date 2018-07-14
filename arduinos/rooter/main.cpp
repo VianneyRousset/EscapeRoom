@@ -14,7 +14,7 @@ void setup()
 
 void loop()
 {
-	if (rooter.fetchPackets() > 0 and available) {
+	if (rooter.fetchInputs() > 0 and available) {
 		packet = rooter.get();
 		available = false;
 	}

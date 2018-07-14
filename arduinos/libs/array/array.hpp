@@ -23,8 +23,8 @@ int queue_pull(Queue_t* queue, void* data);
 class StringQueue {
 
 	private:
+		char* buffer;
 
-	public:
 		// pointer to first str
 		unsigned short p;
 
@@ -34,10 +34,9 @@ class StringQueue {
 		// size of the buffer in bytes 
 		unsigned short N;
 
-		char* buffer;
-	
+	public:
 		// buffer size in byte
-		StringQueue(unsigned short bufferSize, char* buffer);
+		StringQueue(unsigned short bufferSize);
 
 		// push str to queue. Return nb of free buffer space in bytes.
 		// In case of buffer overflow, str is not copied and return -1 

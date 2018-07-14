@@ -32,12 +32,11 @@ int queue_pull(Queue_t* q, void* data)
 	return q->n;
 }
 
-StringQueue::StringQueue(unsigned short bufferSize, char* buffer)
+StringQueue::StringQueue(unsigned short bufferSize) : buffer(new char[bufferSize])
 {
 	this->p = 0;
 	this->n = 0;
 	this->N = bufferSize;
-	this->buffer = buffer;
 }
 
 int	StringQueue::push(const char* str)
