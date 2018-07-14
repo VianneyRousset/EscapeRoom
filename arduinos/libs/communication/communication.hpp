@@ -9,6 +9,11 @@
 #include "array.hpp"
 #include "config.h"
 
+struct{
+	Address_t dest, src;
+	char* msg;
+}
+
 class Communication {
 public:
 	Address_t src;
@@ -23,6 +28,7 @@ public:
 
 	// get packet from input queue.
 	Packet_t get(void);
+
 
 	// add packet to output queue. Return nb of packets in output queue
 	unsigned char send(Address_t dest, const char* msg);
