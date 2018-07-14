@@ -30,7 +30,8 @@ public:
 	virtual unsigned short fetchInputs(void);
 
 	// get packet from input queue.
-	Packet_t get(void);
+	Packet_t pop(void);
+	void remove();
 
 	// send packet and return nb of byte written 
 	virtual size_t send(const Packet_t* packet);

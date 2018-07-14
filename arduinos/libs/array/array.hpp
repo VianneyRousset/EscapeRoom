@@ -28,13 +28,13 @@ class StringQueue {
 		// pointer to first str
 		unsigned short p;
 
-		// number of characters
-		unsigned short n;
-
 		// size of the buffer in bytes 
 		unsigned short N;
 
 	public:
+		// number of characters
+		unsigned short n;
+
 		// buffer size in byte
 		StringQueue(unsigned short bufferSize);
 

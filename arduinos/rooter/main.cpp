@@ -3,21 +3,21 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
-Rooter rooter(COM_ADDRESS_ROOTER);
+Rooter* rooter;
 bool available = true;
 Packet_t packet;
 
 void setup()
 {                 
 	debug_init();
+	rooter = new Rooter(COM_ADDRESS_ROOTER);
 } 
 
 void loop()
 {
-	if (rooter.fetchInputs() > 0 and available) {
-		packet = rooter.get();
+	if (rooter->fetchInputs() > 0 and available) {
+		packet = rooter->pop();
 		available = false;
-		debug_blink(3);
 	}
 
 	// handle packet if addressed to rooter
@@ -25,8 +25,10 @@ void loop()
 	// 	blink...
 	//	availabe = true;
 	// }
-	
-	if (!available and rooter.send(&packet) > 0) // todo == packet.size
+
+	if (!available and rooter->send(&packet) > 0) { // todo == packet.size
+		rooter->remove();
 		available = true;
+	}
 }
 

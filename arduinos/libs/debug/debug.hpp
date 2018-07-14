@@ -4,6 +4,7 @@
 void debug_init(void);
 
 // blink LED n times
-void debug_blink(unsigned short n);
+void debug_shortblink(unsigned short n);
+void debug_longblink(unsigned short n);
 
 #endif
