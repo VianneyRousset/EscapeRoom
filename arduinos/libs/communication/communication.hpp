@@ -6,42 +6,32 @@
 #define COMMUNICATION_H_
 
 #include <stdint.h>
-#include "array.hpp"
 #include "config.h"
 #include <string.h>
+#include <Arduino.h>
+
+#define STR_SIZE 128
 
 typedef uint8_t Address_t;
 
 typedef struct {
 	Address_t dest, src;
-	const char* str;
+	String str;
 } Packet_t;
 
 class Communication {
-protected:
-	StringQueue inputs;
-
 public:
 	Address_t address;
 
 	Communication(Address_t src);
-	
-	// Get new packets in input queue and return nb of byte in input queue.
-	virtual unsigned short fetchInputs(void);
-
-	// get packet from input queue.
-	Packet_t pop(void);
-	void remove();
-
-	// send packet and return nb of byte written 
+	virtual int receive(Packet_t* packet);
 	virtual size_t send(const Packet_t* packet);
 };
-
 
 class Rooter : public Communication {
 public:
 	Rooter(Address_t src);
-	unsigned short fetchInputs(void);
+	int receive(Packet_t* packet);
 	size_t send(const Packet_t* packet);
 };
 
