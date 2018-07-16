@@ -15,6 +15,8 @@ void setup()
 
 void loop()
 {
+	delay(1000);
+
 	if (rooter->fetchInputs() > 0 and available) {
 		packet = rooter->pop();
 		available = false;
