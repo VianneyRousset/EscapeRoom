@@ -4,7 +4,7 @@
 #include <SoftwareSerial.h>
 
 Rooter* rooter;
-bool available = true;
+bool ready = true;
 Packet_t packet;
 
 void setup()
@@ -15,8 +15,6 @@ void setup()
 
 void loop()
 {
-	delay(1000);
-
 	if (rooter->fetchInputs() > 0 and available) {
 		packet = rooter->pop();
 		available = false;
@@ -28,9 +26,7 @@ void loop()
 	//	availabe = true;
 	// }
 
-	if (!available and rooter->send(&packet) > 0) { // todo == packet.size
-		rooter->remove();
-		available = true;
-	}
+	if (!ready and rooter->send(&packet) > 0)
+		ready = true;
 }
 
