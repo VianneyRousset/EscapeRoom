@@ -1,7 +1,8 @@
 #include "communication.hpp"
-#include <SoftwareSerial.h>
 #include "debug.hpp"
+#include <SoftwareSerial.h>
 #include <Arduino.h>
+#include <Wire.h>
 
 #define INPUTS_SIZE 512
 #define READ_TIMEOUT 10000
@@ -9,31 +10,46 @@
 Communication::Communication(Address_t addr) : address(addr)
 {} 
 
-Rooter::Rooter(Address_t addr) : Communication(addr)
+Router::Router(Address_t addr) : Communication(addr)
 {
+	// UART
 	Serial.begin(UART_BAUD_RATE);
 	Serial.setTimeout(READ_TIMEOUT);
-
 	Serial.println("UART initialized");
+
+	// I2C
+	Wire.begin(I2C_ADDRESSES[this->address]);
+	Serial.println("I2C initialized");
 }
 
-int Rooter::receive(Packet_t* p)
+int Router::receive(Packet_t* p)
 {
-	int a = Serial.available();
+	int a = 0;
+	
+	// UART
+	a = Serial.available();
 	if (a > 0) {
 		p->str = Serial.readStringUntil(PACKET_TERMINATOR);
 		sscanf(p->str.c_str(),"%2" SCNu8 "%2" SCNu8, &p->dest, &p->src);
+		return a;
 	}
-	return a;
+
+	// I2C
+	a = Wire.available();
+	if (a > 0) {
+		p->str = Wire.readStringUntil(PACKET_TERMINATOR);
+		sscanf(p->str.c_str(),"%2" SCNu8 "%2" SCNu8, &p->dest, &p->src);
+		return a;
+	}
 }
 
-size_t Rooter::send(const Packet_t* packet)
+size_t Router::send(const Packet_t* packet)
 {
 	switch(packet->dest) {
 		case COM_ADDRESS_COMPUTER:
 			return Serial.println(packet->str);
 		default:
-			return 1; //todo, i2c...
+			return Wire.println(packet->str);
 	}
 }
 

@@ -5,7 +5,7 @@
 #ifndef INFO_H_
 #define INFO_H_
 
-#define DEVICE_NAME "rooter"
+#define DEVICE_NAME "router"
 #define DEVICE_ID 0
 
 #endif

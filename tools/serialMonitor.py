@@ -32,9 +32,11 @@ class Output(Packetizer):
                 if (len(data) > 4):
                     dest,src = int(data[0:2], base=16),int(data[2:4], base=16)
                     data = data[4:]
+                    dest = '{:x}'.format(dest)
+                    src = '{:x}'.format(src)
             except ValueError:
                 pass
-            print('< {:x} -> {:x} : {:s}'.format(src, dest, data))
+            print('< {} -> {} : {:s}'.format(src, dest, data))
 
     def connection_made(self, transport):
         print(repr(transport))
@@ -55,10 +57,12 @@ class Output(Packetizer):
         try:
             if (len(data) > 4):
                 dest,src = int(data[0:2], base=16),int(data[2:4], base=16)
+                dest = '{:x}'.format(dest)
+                src = '{:x}'.format(src)
                 data = data[4:]
         except ValueError:
             pass
-        print('> {:x} -> {:x} : {:s}'.format(src, dest, data))
+        print('> {} -> {} : {:s}'.format(src, dest, data))
 
 
     def connection_lost(self, exc):

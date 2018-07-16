@@ -10,7 +10,7 @@
 typedef uint8_t Address_t;
 
 typedef enum : Address_t {
-	COM_ADDRESS_ROOTER     = 0x00,
+	COM_ADDRESS_ROUTER     = 0x00,
 	COM_ADDRESS_COMPUTER   = 0x01,
 	COM_ADDRESS_CLOCK      = 0x02,
 	COM_ADDRESS_PUZZLE1    = 0x03,

@@ -23,9 +23,9 @@ class Communication {
 		virtual size_t send(const Packet_t* packet) = 0;
 };
 
-class Rooter : public Communication {
+class Router : public Communication {
 	public:
-		Rooter(Address_t src);
+		Router(Address_t src);
 		int receive(Packet_t* packet);
 		size_t send(const Packet_t* packet);
 };

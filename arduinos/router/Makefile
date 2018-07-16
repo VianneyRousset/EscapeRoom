@@ -7,6 +7,7 @@ ARDUINO_LIBS += debug
 ARDUINO_LIBS += communication
 ARDUINO_LIBS += private
 ARDUINO_LIBS += SoftwareSerial 
+ARDUINO_LIBS += Wire
 #CPP_SOURCE_FILES += /home/antonin/Documents/EscapeRoom/arduinos/includes/* 
 
 BOARD_TAG    = uno

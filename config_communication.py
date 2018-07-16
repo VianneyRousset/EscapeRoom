@@ -3,7 +3,7 @@
 #						       +---------+
 #					          ---> |  clock  |
 #	+----------+   UART  +--------+	   I2C   /     +---------+
-#	| computer | <-----> | rooter | <------------> | puzzle1 |
+#	| computer | <-----> | router | <------------> | puzzle1 |
 #	+----------+         +--------+	         \     +---------+
 #						  ---> | puzzle2 |
 #						       +---------+
@@ -51,7 +51,7 @@ commands = [  #  NAME               CODE    DESCRIPTION
 
 # addresses
 addresses = [ #  NAME               ADDRESS         I2C_ADDRESS
-                ('rooter',          0x00,           0x00),
+                ('router',          0x00,           0x00),
                 ('computer',        0x01,           None),
                 ('clock',           0x02,           0x02),
                 ('puzzle1',         0x03,           0x03),
