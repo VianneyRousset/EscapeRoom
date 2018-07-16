@@ -15,18 +15,8 @@ void setup()
 
 void loop()
 {
-	if (rooter->fetchInputs() > 0 and available) {
-		packet = rooter->pop();
-		available = false;
-	}
-
-	// handle packet if addressed to rooter
-	// if (packet.src == me) {
-	// 	blink...
-	//	availabe = true;
-	// }
-
-	if (!ready and rooter->send(&packet) > 0)
-		ready = true;
+	Packet_t p;
+	if (rooter->receive(&p) > 0)
+		rooter->send(&p);
 }
 

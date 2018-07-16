@@ -36,8 +36,7 @@ def configureCommunication():
         f.write('\n')
 
         # packets
-        f.write('#define COM_INPUT_QUEUE_N {}\n'.format(com.inputQueueSize))
-        f.write('#define COM_OUTPUT_QUEUE_N {}\n'.format(com.outputQueueSize))
+        f.write(f'#define PACKET_TERMINATOR \'{com.packetTerminator}\'\n')
         f.write('\n')
 
         # UART 

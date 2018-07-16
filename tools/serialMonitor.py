@@ -12,7 +12,7 @@ import serial_asyncio
 class Output(Packetizer):
 
     inputString = ''
-    TERMINATOR = b'\r\n'
+    TERMINATOR = b'\n'
     ENCODING = 'utf-8'
 
     async def sendMsg(self):
@@ -24,8 +24,17 @@ class Output(Packetizer):
         while True:
             data = await reader.readline()
             data = data.split(b'\n')[0]
-            self.transport.writelines([data])
-            print('<- {:s}'.format(data.decode('utf-8')))
+            self.transport.writelines([data+b'\r\n'])
+
+            data = data.decode('utf-8')
+            dest,src = '??','??'
+            try:
+                if (len(data) > 4):
+                    dest,src = int(data[0:2], base=16),int(data[2:4], base=16)
+                    data = data[4:]
+            except ValueError:
+                pass
+            print('< {:x} -> {:x} : {:s}'.format(src, dest, data))
 
     def connection_made(self, transport):
         print(repr(transport))
@@ -42,7 +51,15 @@ class Output(Packetizer):
 
     def handle_packet(self, data):
         data = data.decode('utf-8')
-        print(f'-> {data}')
+        dest,src = '??','??'
+        try:
+            if (len(data) > 4):
+                dest,src = int(data[0:2], base=16),int(data[2:4], base=16)
+                data = data[4:]
+        except ValueError:
+            pass
+        print('> {:x} -> {:x} : {:s}'.format(src, dest, data))
+
 
     def connection_lost(self, exc):
         print('port closed')

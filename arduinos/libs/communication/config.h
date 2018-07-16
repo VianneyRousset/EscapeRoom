@@ -17,8 +17,7 @@ typedef enum : Address_t {
 	COM_ADDRESS_PUZZLE2    = 0x04
 } com_Address_e;
 
-#define COM_INPUT_QUEUE_N 64
-#define COM_OUTPUT_QUEUE_N 64
+#define PACKET_TERMINATOR '\n'
 
 #define UART_BAUD_RATE 9600
 #define UART_TIMEOUT 1000

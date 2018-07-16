@@ -38,8 +38,7 @@
 headerFile = 'arduinos/libs/communication/config.h'
 
 # packet
-inputQueueSize = 64 # in nb of packets
-outputQueueSize = 64 # in nb of packets
+packetTerminator = r'\n'; # in bytes
 
 # commands
 commands = [  #  NAME               CODE    DESCRIPTION
