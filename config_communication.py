@@ -62,6 +62,7 @@ uartTimeout = 1000 # in ms
 uartBaudRate = 9600
 
 # I2C
+i2cTimeout = 1000 # in ms
 i2cBaudRate = 9600
 
 # post treatement

@@ -24,6 +24,7 @@ typedef enum : Address_t {
 
 typedef uint8_t I2C_address_t;
 #define I2C_BAUD_RATE 9600
+#define I2C_TIMEOUT 1000
 
 static const char I2C_ADDRESSES[255]{	
 			 0x00,   -1, 0x02, 0x03, 0x04,   -1,   -1,   -1,

@@ -40,13 +40,14 @@ def configureCommunication():
         f.write('\n')
 
         # UART 
-        f.write('#define UART_BAUD_RATE {}\n'.format(com.uartBaudRate))
-        f.write('#define UART_TIMEOUT {}\n'.format(com.uartTimeout))
+        f.write(f'#define UART_BAUD_RATE {com.uartBaudRate}\n')
+        f.write(f'#define UART_TIMEOUT {com.uartTimeout}\n')
         f.write('\n')
 
         # i2c
         f.write('typedef uint8_t I2C_address_t;\n')
-        f.write('#define I2C_BAUD_RATE {}\n'.format(com.i2cBaudRate))
+        f.write(f'#define I2C_BAUD_RATE {com.i2cBaudRate}\n')
+        f.write(f'#define I2C_TIMEOUT {com.i2cTimeout}\n')
         f.write('\n')
 
         i2cAddresses = [-1]*0xff

@@ -5,7 +5,7 @@
 #ifndef INFO_H_
 #define INFO_H_
 
-#define DEVICE_NAME "timer"
+#define DEVICE_NAME "clock"
 #define DEVICE_ID 1
 
 #endif
