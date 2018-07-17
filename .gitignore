@@ -1,2 +1,6 @@
 arduinos/router/build-uno
+arduinos/clock/build-nano-atmega328
+arduinos/clock/build-nano-atmega328
+arduinos/puzzle1/build-nano-atmega328
+arduinos/puzzle2/build-nano-atmega328
 __pycache__
