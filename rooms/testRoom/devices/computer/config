@@ -1,0 +1,8 @@
+'name': 'Computer',
+'description': 'Main computer that handle the room story',
+
+'components': {
+        },
+
+'logmsg': {
+        },

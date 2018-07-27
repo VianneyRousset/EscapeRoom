@@ -1,0 +1,40 @@
+'logmsg': {
+
+# to avoid infinity loops, any logmsg during the packet sending procedure have to be
+# for failure reason. Also any logmsg during this procedure have to be fully checked.
+
+        'error': {
+            'read_fail_packet_size': ('Failed to read packet size'),
+            'read_fail_packet_src': ('Failed to read packet src'),
+            'read_fail_packet_dest': ('Failed to read packet dest'),
+            'read_fail_packet_cmd': ('Failed to read packet cmd'),
+            'read_fail_packet_args': ('Failed to read packet args'),
+			'read_packet_size_too_big': ('Received a packet with too big size: {0}/{1}',
+											['uint32_t', 'uint32_t']),
+			'read_packet_size_too_small': ('Received a packet with a too small size: {0}/{1}',
+											['uint32_t', 'uint32_t']),
+			'read_packet_missing_cmd': ('Received a packet with a size so small that it cannot '
+										 'contain a cmd: {0}/{1}',
+											['uint32_t', 'uint32_t']),
+
+			'create_packet_too_big': ('Trying to create a too big packet (max: {0})', ['uint32_t']),
+			'create_packet_invalid_type': ('Received invalid type during packet creation', ['char']),
+
+            },
+
+        'warn': {
+            'received_invalid_packet_header': ('Received invalid package header {}', ['packet']),
+            'garbage_data': ('Read gargabe data (outside packet)', ['uintn']),
+            'size_packet': ('Packet size exceeds limit'),
+            },
+
+        'info': {
+            'init_success': ('Initialization success'),
+            },
+
+        'debug': {
+
+            }
+
+        },
+

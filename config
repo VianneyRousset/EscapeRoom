@@ -1,0 +1,26 @@
+'commands': ['ping', 'get', 'set', 'set_log', 'reset', 'log', 'ping_back', 'status_update'],
+
+'protocol': {
+
+	'packet_max_size': 32-2, # limited by i2c minus the two delimiters
+	'packet_delimiters': b'()',
+
+	'packettypes': {
+		'device':	'uint8',
+		'size':		'uint8',
+		'command':	'uint8',
+		'logcode':	'uint16',
+		'component':'uint8',
+	},
+
+	'uart': {
+		'timeout' : 1, # in seconds
+		'baudrate': 9600, # in [Hz]
+	},
+
+	'i2c': {
+		'timeout' : 1, # in seconds
+		'baudrate': 9600, # in [Hz]
+	},
+
+}

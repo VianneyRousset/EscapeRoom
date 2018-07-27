@@ -1,3 +1,0 @@
-#!/bin/sh
-
-emerge --update --deep --with-bdeps=y --backtrack=9999 @qt5-essentials '=qtgui-5.11.1' '=qtdbus-5.11.1' '=qtcore-5.11.1' '=qtxmlpatterns-5.11.1' '=qttest-5.11.1' '=qtnetwork-5.11.1' '=qtdeclarative-5.11.1' '=qtsql-5.11.1-r1' '=qtwidgets-5.11.1' '=qtnetwork-5.11.1' '=qttranslations-5.11.1' '=qtmultimedia-5.11.1' '=qtsvg-5.11.1' '=qtgraphicaleffects-5.11.1' '=qtwebsockets-5.11.1' '=qthelp-5.11.1' '=qtprintsupport-5.11.1' '=qtbluetooth-5.11.1' '=qtwebchannel-5.11.1' '=qtquickcontrols-5.11.1' '=designer-5.11.1' '=PyQt5-5.10.1-r1' '=qtwebengine-5.11.1' '=qtconcurrent-5.11.1' '=qtwayland-5.11.1' '=qtserialport-5.11.1' '=qtscript-5.11.1' '=qtopengl-5.11.1' '=qtx11extras-5.11.1' $@

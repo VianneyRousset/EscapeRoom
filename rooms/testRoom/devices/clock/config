@@ -1,0 +1,24 @@
+'name': 'Clock',
+'description': 'A timer indicating the remaining game time',
+
+'components': {
+        'led_builtin' : 'bool'
+        #'motor_angle' : lambda x, 0 <: x <= 360,
+        },
+
+'logmsg': {
+
+        'error': {
+            },
+
+        'warn': {
+            },
+
+        'info': {
+            'init_success' : ('Initialization success'),
+            },
+
+        'debug': {
+            },
+
+        },

@@ -1,0 +1,24 @@
+'name': 'Router',
+'description': 'The main hub that rout packet in the room and to the computer',
+
+'components': {
+        'led_builtin' : 'bool',
+        #'motor_angle' : lambda x, 0 <: x <= 360,
+        },
+
+'logmsg': {
+
+        'error': {
+            },
+
+        'warn': {
+            },
+
+        'info': {
+            'init_success' : ('Initialization success'),
+            },
+
+        'debug': {
+            },
+
+        },
