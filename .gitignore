@@ -1,2 +1,2 @@
-rooms/**/devices/build-*
+rooms/**/build-*
 **/__pycache__
