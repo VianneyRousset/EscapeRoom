@@ -4,6 +4,5 @@
 #ifndef LOGMSG_H_
 #define LOGMSG_H_
 
-
 #endif
 

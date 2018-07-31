@@ -10,14 +10,14 @@
             'read_fail_packet_cmd': ('Failed to read packet cmd'),
             'read_fail_packet_args': ('Failed to read packet args'),
 			'read_packet_size_too_big': ('Received a packet with too big size: {0}/{1}',
-											['uint32_t', 'uint32_t']),
+											['uint32', 'uint32']),
 			'read_packet_size_too_small': ('Received a packet with a too small size: {0}/{1}',
-											['uint32_t', 'uint32_t']),
+											['uint32', 'uint32']),
 			'read_packet_missing_cmd': ('Received a packet with a size so small that it cannot '
 										 'contain a cmd: {0}/{1}',
-											['uint32_t', 'uint32_t']),
+											['uint32', 'uint32']),
 
-			'create_packet_too_big': ('Trying to create a too big packet (max: {0})', ['uint32_t']),
+			'create_packet_too_big': ('Trying to create a too big packet (max: {0})', ['uint32']),
 			'create_packet_invalid_type': ('Received invalid type during packet creation', ['char']),
 
             },

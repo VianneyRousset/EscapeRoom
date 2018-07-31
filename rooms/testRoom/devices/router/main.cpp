@@ -3,6 +3,7 @@
 #include "communication.hpp"
 #include "request.hpp"
 #include "logger.hpp"
+#include "logmsg.h"
 #include <Arduino.h>
 
 //TODO rename router -> hub
@@ -11,14 +12,12 @@ void setup()
 {                 
 	debug_init();
 	com_autoinit(request_handler);
-	//Serial.begin(9600);
-
-//	logger_info(); //TODO: not really true
+	logger(INFO_INIT_SUCCESS);
 } 
 
 void loop()
 {
-	int n = com_send(CMD_PING_BACK);
+	int n = com_send(CMD_STATUS_UPDATE, "ob", COMP_LED_BUILTIN, true);
 	delay(1000);
 	debug_longblink(n);
 

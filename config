@@ -5,11 +5,11 @@
 	'packet_max_size': 32-2, # limited by i2c minus the two delimiters
 	'packet_delimiters': b'()',
 
-	'packettypes': {
+	'ptypes': {
 		'device':	'uint8',
 		'size':		'uint8',
 		'command':	'uint8',
-		'logcode':	'uint16',
+		'logmsg':	'uint16',
 		'component':'uint8',
 	},
 

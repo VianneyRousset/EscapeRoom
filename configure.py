@@ -19,7 +19,7 @@ def write_libslogmsg(system):
         with open(join(lib.path, LOGMSG_H_FILENAME), 'w') as f:
             configtools.writeHeader(f, mode='C')
             configtools.writePragmaOnce(f, lib.name+'_'+LOGMSG_H_FILENAME)
-            lib.logmsg.writeCodes(f, ndigits=4)
+            lib.logmsg.write_define(f)
             configtools.writeFooter(f, mode='C')
 
 
@@ -28,7 +28,7 @@ def write_system(system):
     # write 'system' file
     with open(join(SYSTEM_DIR, SYSTEM_FILENAME), 'w') as f:
         configtools.writeHeader(f, mode='python')
-        f.write(pformat(system.getcontent()))
+        f.write(pformat(system.save()))
         configtools.writeFooter(f, mode='python')
 
     # write 'commands.h' header file in 'system' library
@@ -36,7 +36,7 @@ def write_system(system):
     with open(join(lib.path, COMMANDS_H_FILENAME), 'w') as f:
         configtools.writeHeader(f, mode='C')
         configtools.writePragmaOnce(f, COMMANDS_H_FILENAME)
-        system.commands.writeCodes(f)
+        system.commands.write_define(f)
         configtools.writeFooter(f, mode='C')
 
     # write 'protocol.h' header file in 'system' library
@@ -47,11 +47,11 @@ def write_system(system):
         configtools.writePragmaOnce(f, PROTOCOL_H_FILENAME)
         f.write('#include <stdint.h>\n\n')
 
-        types = pro['packettypes']
+        types = pro['ptypes']
         configtools.write_typedef(f, 'device', types['device'])
         configtools.write_typedef(f, 'packetSize', types['size'])
         configtools.write_typedef(f, 'command', types['command'])
-        configtools.write_typedef(f, 'logcode', types['logcode'])
+        configtools.write_typedef(f, 'logmsg', types['logmsg'])
         configtools.write_typedef(f, 'component', types['component'], end='\n\n')
 
         configtools.write_defineInt(f, 'packet_max_size', pro['packet_max_size'], base=10)
@@ -74,7 +74,7 @@ def write_device(system):
             with open(join(dev.path, LOGMSG_H_FILENAME), 'w') as f:
                 configtools.writeHeader(f, mode='C')
                 configtools.writePragmaOnce(f, LOGMSG_H_FILENAME)
-                dev.logmsg.writeCodes(f, ndigits=4)
+                dev.logmsg.write_define(f)
                 configtools.writeFooter(f, mode='C')
 
             # write 'device.h' header file in device
@@ -83,10 +83,10 @@ def write_device(system):
             with open(join(dev.path, DEVICE_H_FILENAME), 'w') as f:
                 configtools.writeHeader(f, mode='C')
                 configtools.writePragmaOnce(f, DEVICE_H_FILENAME)
-                configtools.write_defineInt(f, 'device', dev.code)
-                configtools.write_defineInt(f, 'computer', computer.code)
-                configtools.write_defineInt(f, 'hub', hub.code, end='\n\n')
-                dev.components.writeCodes(f, ndigits=2)
+                dev.write_define(f, name='device')
+                room.devices['computer'].write_define(f, name='computer')
+                room.devices['router'].write_define(f, name='hub')
+                dev.components.write_define(f)
                 configtools.writeFooter(f, mode='C')
 
 

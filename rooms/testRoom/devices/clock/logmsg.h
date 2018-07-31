@@ -4,7 +4,6 @@
 #ifndef LOGMSG_H_
 #define LOGMSG_H_
 
-#define INFO_INIT_SUCCESS                                        0x0001
-
+#define INFO_INIT_SUCCESS                        0x0012
 #endif
 

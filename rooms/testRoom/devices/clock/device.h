@@ -4,11 +4,9 @@
 #ifndef DEVICE_H_
 #define DEVICE_H_
 
-#define DEVICE                                                   0x4
-#define COMPUTER                                                 0x2
-#define HUB                                                      0x6
-
-#define LED_BUILTIN                                              0x01
-
+#define DEVICE                                   0x02
+#define COMPUTER                                 0x01
+#define HUB                                      0x03
+#define COMP_LED_BUILTIN                         0x01
 #endif
 

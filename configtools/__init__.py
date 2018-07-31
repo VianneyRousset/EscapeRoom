@@ -10,33 +10,17 @@ HEADER_TEXT = '''\
 
 CONFIG_FILENAME = 'config'
 
-class Config(dict):
-
-    def __init__(self, path):
-        with open(path) as f:
-            d = ast.literal_eval('{'+f.read()+'}') #TODO use safer config (but json hasn't hex nb) 
-            super().__init__(d)
-
-
 class Container(dict):
 
-
-    def __init__(self, path, directexclude=set(), **kwargs):
-        self.path = path
+    def __init__(self, system, contenttype, path, counter):
+        self.system,self.path,self.contenttype = system,path,contenttype
+        self.counter = system.counters[counter].__iter__()
         self.codes = dict()
-        self.kwargs = kwargs
-        exclude = kwargs.get('exclude', set()).union(directexclude)
-        self.counter = countExcluding(kwargs.get('start', 0x01), exclude) 
 
     def add(self, a):
         a.code = next(self.counter)
         self.update({a.name:a})
         self.codes.update({a.code:a.name})
-
-    def writeCodes(self, f, ndigits=1, end='\n'):
-        for m in self.values():
-            m.write_define(f, ndigits=ndigits)
-        if end: f.write(end)
 
     def get(self, k, d=None):
         if isinstance(k, str): return super().get(k, d)
@@ -46,63 +30,57 @@ class Container(dict):
         if isinstance(k, str): return super().__getitem__(k)
         return super()[self.codes[k]]
 
-    def getcodes(self):
-        return self.codes
-
-    def getcontent(self):
-        return {'codes': self.getcodes(), 'content': {k:v.getcontent() for k,v in super().items()}}
-
-
-class ContainerFolder(Container):
-
-    def __init__(self, path, contenttype, directexclude=set(), **kwargs):
-        super().__init__(path, directexclude, **kwargs)
-        self.contenttype = contenttype
-        self.loadFolder()
+    def save(self):
+        return {'codes': self.codes, 'content': {k:v.save() for k,v in super().items()}}
 
     def loadFolder(self, relativepath='.'):
         absp = lambda x: join(self.path, relativepath, x)
         cond = lambda x: isdir(absp(x)) and isfile(join(absp(x), CONFIG_FILENAME))
         for p in filter(cond, listdir(absp('.'))):
-            self.add(self.contenttype(absp(p), code=next(self.counter)))
-
-
-class ContainerFile(Container):
-
-    def __init__(self, path, directexclude=set(), **kwargs):
-        super().__init__(path, directexclude, **kwargs)
-        self.loadConfigFile()
+            self.add(self.contenttype(self.system, absp(p), code=None))
 
     def loadConfigFile(self, relativepath='.'):
         self.parseConfig(Config(join(self.path, relativepath, CONFIG_FILENAME)))
+
+    def fetch(self, elementtype):
+        return set().union(*[v.fetch(elementtype) for v in self.values()])
 
     def parseConfig(self, cfg):
         ''' should be overwritten '''
         pass
 
-
-class LibraryContainer(ContainerFolder):
-
-    def __init__(self, path, **kwargs):
-        super().__init__(path, Library, directexclude=kwargs.get('elib', set()), **kwargs)
+    def write_define(self, f):
+        for i in self.values():
+            i.write_define(f)
 
 
-class RoomContainer(ContainerFolder):
+class LibraryContainer(Container):
 
-    def __init__(self, path, **kwargs): 
-        super().__init__(path, Room, directexclude=kwargs.get('eroom', set()), **kwargs)
-
-
-class DeviceContainer(ContainerFolder):
-
-    def __init__(self, path, **kwargs):
-        super().__init__(path, Device, directexclude=kwargs.get('edev', set()), **kwargs)
+    def __init__(self, system, path):
+        super().__init__(system, Library, path, 'library')
+        self.loadFolder()
 
 
-class LogmsgContainer(ContainerFile):
+class RoomContainer(Container):
 
-    def __init__(self, path, **kwargs):
-        super().__init__(path, directexclude=kwargs.get('elogmsg', set()), **kwargs)
+    def __init__(self, system, path):
+        super().__init__(system, Room, path, 'room')
+        self.loadFolder()
+
+
+class DeviceContainer(Container):
+
+    def __init__(self, system, path):
+        super().__init__(system, Device, path, 'device')
+        self.loadFolder()
+
+
+class LogmsgContainer(Container):
+
+    def __init__(self, system, path, module):
+        super().__init__(system, Logmsg, path, 'logmsg')
+        self.module = module
+        self.loadConfigFile()
 
     def parseConfig(self, cfg):
         logmsg = cfg.get('logmsg', dict())
@@ -111,52 +89,61 @@ class LogmsgContainer(ContainerFile):
                 name = f'{level}_{n}'
                 description = x if isinstance(x, str) else x[0]
                 description_params = [] if isinstance(x, str) else x[1]
-                self.add(Logmsg(name, None, level, description, description_params, **self.kwargs))
+                self.add(Logmsg(self.system, name, None, level, self.module,
+                    description, description_params))
 
 
-class CommandContainer(ContainerFile):
+class CommandContainer(Container):
 
-    def __init__(self, path, **kwargs):
-        super().__init__(path, directexclude=kwargs.get('ecmd', set()), **kwargs)
+    def __init__(self, system, path):
+        super().__init__(system, Command, path, 'command')
+        self.loadConfigFile()
 
     def parseConfig(self, cfg):
         commands = cfg.get('commands', dict())
         for n in commands:
-            self.add(Command(name=f'cmd_{n}', code=None))
+            self.add(Command(self.system, name=n, code=None))
 
 
-class ComponentContainer(ContainerFile):
+class ComponentContainer(Container):
 
-    def __init__(self, path, **kwargs):
-        super().__init__(path, directexclude=kwargs.get('ecomp', set()), **kwargs)
+    def __init__(self, system, path):
+        super().__init__(system, Component, path, 'component')
+        self.loadConfigFile()
 
     def parseConfig(self, cfg):
         components = cfg.get('components', dict())
         for n,v in components.items():
-            self.add(Component(name=n, code=None, value=v, **self.kwargs))
+            self.add(Component(self.system, name=n, code=None, value=v))
 
 
 class Element:
 
-    def __init__(self, name, code=None):
-        self.name = name
-        self.code = code
+    def __init__(self, system, name, code=None):
+        self.system,self.name,self.code = system,name,code
 
-    def getcontent(self):
+    def save(self):
         ''' should be overwritten '''
         pass
 
-    def write_define(self, f, ndigits=2):
-        write_defineInt(f, self.name, self.code, ndigits=ndigits)
+    def write_define(self, f):
+        ''' should be overwritten '''
+        pass
 
+    def fetch(self, elementtype):
+        ''' should be overwritten '''
+        pass
+
+    def write_define(self, f):
+        f.write('#define {:40s} 0x{:x}\n'.format(self.name.upper(), self.code))
 
 # An element is a folder containing a config file
 class FolderElement(Element):
 
-    def __init__(self, path, code=None):
+    def __init__(self, system, path, code=None):
         self.path = path
         self.cfg = Config(join(path, CONFIG_FILENAME))
-        super().__init__(name=basename(path), code=code)
+        super().__init__(system=system, name=basename(path), code=code)
 
 
 class System(FolderElement):
@@ -164,100 +151,166 @@ class System(FolderElement):
     ROOMS_DIR  = 'rooms'
     LIBS_DIR   = 'libs'
 
-    def __init__(self, path, **kwargs):
-        super().__init__(path)
-        self.protocol = self.cfg.get('protocol', **kwargs)
-        kwargs['exclude'] = kwargs.get('exclude', set()).union({*self.getDelimitersInt()})
-        self.commands = CommandContainer(self.path, **kwargs)
-        self.libraries = LibraryContainer(join(self.path, 'libs'), **kwargs)
-        kwargs['elogmsg'] = kwargs.get('elogmsg', set()).union(self.libraries.getcodes().keys())
-        self.rooms = RoomContainer(join(self.path, 'rooms'), **kwargs)
+    def __init__(self, path):
+        super().__init__(self, path)
+        self.protocol = self.cfg.get('protocol')
+        self.ptypes = self.protocol['ptypes']
+        self.psizes = self.getpsizes()
+        self.delimiters = self.getdelimiters()
+        self.counters = self.createcounters()
 
-    def getDelimitersInt(self):
+        self.commands = CommandContainer(self, self.path)
+        self.libraries = LibraryContainer(self, join(self.path, 'libs'))
+        self.counters['logmsg'].push()
+        self.rooms = RoomContainer(self, join(self.path, 'rooms'))
+
+    def getdelimiters(self):
         c = self.protocol['packet_delimiters']
         if isinstance(c, str): c = c.encode('ascii')
         return [*c]
 
-    def getcontent(self):
-        libraries = {l.name: l.getcontent() for l in self.libraries.values()}
-        rooms = {r.name: r.getcontent() for r in self.rooms.values()}
-        return {'commands': self.commands.getcontent(), 'libraries': self.libraries.getcontent(),
-                'rooms': self.rooms.getcontent(), 'protocol': self.protocol}
+    def getpsizes(self):
+        sizes = {'uint8':1, 'uint16':2, 'uint32':4, 'uint64':8}
+        return {k:sizes[self.ptypes[k]] for k in ['command', 'device', 'logmsg', 'component']}
+
+    def createcounters(self):
+        counters = dict()
+        counters['library']   = countExcluding(exclude=self.delimiters)
+        counters['room']      = countExcluding(exclude=self.delimiters)
+        counters['command']   = countExcluding(exclude=self.delimiters,
+                end=1<<8*self.psizes['command'])
+        counters['device']    = countExcluding(exclude=self.delimiters,
+                end=1<<8*self.psizes['device'])
+        counters['logmsg']    = countExcluding(exclude=self.delimiters,
+                end=1<<8*self.psizes['logmsg'])
+        counters['component'] = countExcluding(exclude=self.delimiters,
+                end=1<<8*self.psizes['component'])
+        return counters
+
+    def save(self):
+        libraries = {l.name: l.save() for l in self.libraries.values()}
+        rooms = {r.name: r.save() for r in self.rooms.values()}
+        return {'commands': self.commands.save(), 'libraries': self.libraries.save(),
+                'rooms': self.rooms.save(), 'protocol': self.protocol}
+
+    def fetch(self, elementtype):
+        if elementtype == 'system': return {self}
+        containers = [self.commands, self.libraries, self.rooms]
+        return set().union(*[v.fetch(elementtype) for v in containers])
+
 
 
 class Library(FolderElement):
 
-    def __init__(self, path, code, **kwargs):
-        super().__init__(path)
-        self.logmsg = LogmsgContainer(self.path, **kwargs)
+    def __init__(self, system, path, code):
+        super().__init__(system, path)
+        self.logmsg = LogmsgContainer(self.system, self.path, self.name)
+        system.counters['logmsg'].push()
 
-    def getcontent(self):
-        return {'logmsg': self.logmsg.getcontent()}
+    def save(self):
+        return {'logmsg': self.logmsg.save()}
+
+    def fetch(self, elementtype):
+        if elementtype == 'library': return {self}
+        return self.logmsg.fetch(elementtype)
 
 
 class Room(FolderElement):
 
-    def __init__(self, path, code, **kwargs):
-        super().__init__(path)
+    def __init__(self, system, path, code):
+        super().__init__(system, path)
         self.description = self.cfg.get('description', None)
-        self.devices = DeviceContainer(join(self.path, 'devices'), **kwargs)
+        self.devices = DeviceContainer(self.system, join(self.path, 'devices'))
 
-    def getcontent(self):
-        return {'description': self.description, 'devices': self.devices.getcontent()}
+    def save(self):
+        return {'description': self.description, 'devices': self.devices.save()}
+
+    def fetch(self, elementtype):
+        if elementtype == 'room': return {self}
+        return self.devices.fetch(elementtype)
 
 
 class Device(FolderElement):
 
     #TODO extend to have room cmd
-    def __init__(self, path, code, **kwargs):
-        super().__init__(path)
-        self.components = ComponentContainer(self.path, **kwargs) 
-        self.logmsg = LogmsgContainer(self.path, **kwargs)
+    def __init__(self, system, path, code):
+        super().__init__(system, path)
+        self.components = ComponentContainer(self.system, self.path) 
+        self.logmsg = LogmsgContainer(self.system, self.path, self.name)
         self.code = code
     
-    def getcontent(self):
-        return {'components': self.components.getcontent(), 'logmsg': self.logmsg.getcontent()}
+    def save(self):
+        return {'components': self.components.save(), 'logmsg': self.logmsg.save()}
+
+    def write_define(self, f, name=None):
+        if name == None: name = 'DEV_'+self.name
+        s = '#define {:40s} 0x{:0' + str(2*self.system.psizes['device']) + 'x}\n'
+        f.write(s.format(name.upper(), self.code))
+
+    def fetch(self, elementtype):
+        if elementtype == 'device': return {self}
+        return set().union(*[v.fetch(elementtype) for v in [self.components, self.logmsg]])
 
 
 class Logmsg(Element):
 
-    def __init__(self, name, code, level, description, description_params):
-        super().__init__(name, code)
+    def __init__(self, system, name, code, level, module, description, description_params):
+        super().__init__(system, name, code)
         self.level = level 
         self.description = description
         self.description_params = description_params
+        self.module = module
 
-    def getcontent(self):
-        return {'code': self.code, 'name': self.name, 'description': self.description,
-                'description_params': self.description_params}
+    def save(self):
+        return {'code': self.code, 'name': self.name, 'module': self.module,
+                'description': self.description, 'description_params': self.description_params}
+
+    def write_define(self, f, name=None):
+        if name == None: name = self.name
+        s =  '#define {:40s} 0x{:0' + str(2*self.system.psizes['logmsg']) + 'x}\n'
+        f.write(s.format(name.upper(), self.code))
+
+    def fetch(self, elementtype):
+        if elementtype == 'logmsg': return {self}
+        return set()
 
 
 class Command(Element):
 
-    def __init__(self, name, code):
-        super().__init__(name, code)
+    def __init__(self, system, name, code):
+        super().__init__(system, name, code)
 
-    def getcontent(self):
+    def save(self):
         return {'name': self.name, 'code': self.code}
+
+    def write_define(self, f, name=None):
+        if name == None: name = 'CMD_'+self.name
+        s =  '#define {:40s} 0x{:0' + str(2*self.system.psizes['command']) + 'x}\n'
+        f.write(s.format(name.upper(), self.code))
+
+    def fetch(self, elementtype):
+        if elementtype == 'command': return {self}
+        return set()
 
 
 class Component(Element):
 
-    def __init__(self, name, code, value):
-        super().__init__(name, code)
+    def __init__(self, system, name, code, value):
+        super().__init__(system, name, code)
         self.value = value
 
-    def getcontent(self):
+    def save(self):
         return {'name': self.name, 'code': self.code, 'value': self.value}
 
+    def write_define(self, f, name=None):
+        if name == None: name = 'COMP_'+self.name
+        s =  '#define {:40s} 0x{:0' + str(2*self.system.psizes['component']) + 'x}\n'
+        f.write(s.format(name.upper(), self.code))
 
-def countExcluding(start=0, exclude=set()):
-    i = start
-    while True:
-        while i in exclude:
-            i += 1
-        yield i
-        i += 1
+    def fetch(self, elementtype):
+        if elementtype == 'component': return {self}
+        return set()
+
 
 def writeHeader(f, mode, end='\n\n'):
     f.write(HEADER_TEXT.format({'C': '//', 'python': '#'}[mode]))
@@ -301,3 +354,37 @@ def write_comment(f, s):
         comment = pformat(f'/* {s} */')
     f.write(comment)
 
+class Config(dict):
+
+    def __init__(self, path):
+        with open(path) as f:
+            d = ast.literal_eval('{'+f.read()+'}') #TODO use safer config (but json hasn't hex nb) 
+            super().__init__(d)
+
+
+class countExcluding:
+
+    def __init__(self, start=0x01, exclude={}, end=None):
+        self.start = start
+        self.next = start
+        self.imax = start
+        self.exclude = exclude
+        self.end = end
+
+    def __iter__(self):
+        self.next = self.start
+        return self
+
+    def __next__(self):
+        while self.next in self.exclude:
+            self.next += 1
+        i = self.next
+        if self.end != None and i > self.end:
+            raise ValueError(f'Iterator passed end limit: {i}/{self.end}')
+        self.imax = max(self.imax, i)
+        self.next += 1
+        return i
+    
+    def push(self):
+        self.start,self.imax = self.imax+1,self.imax
+        

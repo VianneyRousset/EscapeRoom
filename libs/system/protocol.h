@@ -9,7 +9,7 @@
 typedef uint8_t Device_t;
 typedef uint8_t Packetsize_t;
 typedef uint8_t Command_t;
-typedef uint16_t Logcode_t;
+typedef uint16_t Logmsg_t;
 typedef uint8_t Component_t;
 
 #define PACKET_MAX_SIZE                                          30

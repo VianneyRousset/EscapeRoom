@@ -4,10 +4,8 @@
 #ifndef DEVICE_H_
 #define DEVICE_H_
 
-#define DEVICE                                                   0x2
-#define COMPUTER                                                 0x2
-#define HUB                                                      0x6
-
-
+#define DEVICE                                   0x01
+#define COMPUTER                                 0x01
+#define HUB                                      0x03
 #endif
 

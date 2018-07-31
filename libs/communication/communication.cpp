@@ -63,7 +63,7 @@ int com_send(uint8_t cmd, const char* types,  ...)
 
 int com_send(uint8_t cmd, const char* types, va_list args)
 {
-	Packet_t p = createPacket(COMPUTER, HOST, cmd, types, args);
+	Packet_t p = createPacket(HOST, COMPUTER, cmd, types, args);
 	return sendPacket(&p, HOST, HUB, COMPUTER);
 }
 
