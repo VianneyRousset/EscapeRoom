@@ -84,7 +84,7 @@ class LogmsgContainer(Container):
 
     def parseConfig(self, cfg):
         logmsg = cfg.get('logmsg', dict())
-        for level in {'error', 'warn', 'info', 'debug'}:
+        for level in ['error', 'warn', 'info', 'debug']:
             for n,x in logmsg.get(level, dict()).items():
                 name = f'{level}_{n}'
                 description = x if isinstance(x, str) else x[0]

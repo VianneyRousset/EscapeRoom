@@ -19,21 +19,21 @@
                           'status_update': {'code': 8,
                                             'name': 'status_update'}}},
  'libraries': {'codes': {1: 'communication', 2: 'system', 3: 'debug'},
-               'content': {'communication': {'logmsg': {'codes': {1: 'info_init_success',
-                                                                  2: 'warn_received_invalid_packet_header',
-                                                                  3: 'warn_garbage_data',
-                                                                  4: 'warn_size_packet',
-                                                                  5: 'error_read_fail_packet_size',
-                                                                  6: 'error_read_fail_packet_src',
-                                                                  7: 'error_read_fail_packet_dest',
-                                                                  8: 'error_read_fail_packet_cmd',
-                                                                  9: 'error_read_fail_packet_args',
-                                                                  10: 'error_read_packet_size_too_big',
-                                                                  11: 'error_read_packet_size_too_small',
-                                                                  12: 'error_read_packet_missing_cmd',
-                                                                  13: 'error_create_packet_too_big',
-                                                                  14: 'error_create_packet_invalid_type'},
-                                                        'content': {'error_create_packet_invalid_type': {'code': 14,
+               'content': {'communication': {'logmsg': {'codes': {1: 'error_read_fail_packet_size',
+                                                                  2: 'error_read_fail_packet_src',
+                                                                  3: 'error_read_fail_packet_dest',
+                                                                  4: 'error_read_fail_packet_cmd',
+                                                                  5: 'error_read_fail_packet_args',
+                                                                  6: 'error_read_packet_size_too_big',
+                                                                  7: 'error_read_packet_size_too_small',
+                                                                  8: 'error_read_packet_missing_cmd',
+                                                                  9: 'error_create_packet_too_big',
+                                                                  10: 'error_create_packet_invalid_type',
+                                                                  11: 'warn_received_invalid_packet_header',
+                                                                  12: 'warn_garbage_data',
+                                                                  13: 'warn_size_packet',
+                                                                  14: 'info_init_success'},
+                                                        'content': {'error_create_packet_invalid_type': {'code': 10,
                                                                                                          'description': 'Received '
                                                                                                                         'invalid '
                                                                                                                         'type '
@@ -43,7 +43,7 @@
                                                                                                          'description_params': ['char'],
                                                                                                          'module': 'communication',
                                                                                                          'name': 'error_create_packet_invalid_type'},
-                                                                    'error_create_packet_too_big': {'code': 13,
+                                                                    'error_create_packet_too_big': {'code': 9,
                                                                                                     'description': 'Trying '
                                                                                                                    'to '
                                                                                                                    'create '
@@ -56,7 +56,7 @@
                                                                                                     'description_params': ['uint32'],
                                                                                                     'module': 'communication',
                                                                                                     'name': 'error_create_packet_too_big'},
-                                                                    'error_read_fail_packet_args': {'code': 9,
+                                                                    'error_read_fail_packet_args': {'code': 5,
                                                                                                     'description': 'Failed '
                                                                                                                    'to '
                                                                                                                    'read '
@@ -65,7 +65,7 @@
                                                                                                     'description_params': [],
                                                                                                     'module': 'communication',
                                                                                                     'name': 'error_read_fail_packet_args'},
-                                                                    'error_read_fail_packet_cmd': {'code': 8,
+                                                                    'error_read_fail_packet_cmd': {'code': 4,
                                                                                                    'description': 'Failed '
                                                                                                                   'to '
                                                                                                                   'read '
@@ -74,7 +74,7 @@
                                                                                                    'description_params': [],
                                                                                                    'module': 'communication',
                                                                                                    'name': 'error_read_fail_packet_cmd'},
-                                                                    'error_read_fail_packet_dest': {'code': 7,
+                                                                    'error_read_fail_packet_dest': {'code': 3,
                                                                                                     'description': 'Failed '
                                                                                                                    'to '
                                                                                                                    'read '
@@ -83,7 +83,7 @@
                                                                                                     'description_params': [],
                                                                                                     'module': 'communication',
                                                                                                     'name': 'error_read_fail_packet_dest'},
-                                                                    'error_read_fail_packet_size': {'code': 5,
+                                                                    'error_read_fail_packet_size': {'code': 1,
                                                                                                     'description': 'Failed '
                                                                                                                    'to '
                                                                                                                    'read '
@@ -92,7 +92,7 @@
                                                                                                     'description_params': [],
                                                                                                     'module': 'communication',
                                                                                                     'name': 'error_read_fail_packet_size'},
-                                                                    'error_read_fail_packet_src': {'code': 6,
+                                                                    'error_read_fail_packet_src': {'code': 2,
                                                                                                    'description': 'Failed '
                                                                                                                   'to '
                                                                                                                   'read '
@@ -101,7 +101,7 @@
                                                                                                    'description_params': [],
                                                                                                    'module': 'communication',
                                                                                                    'name': 'error_read_fail_packet_src'},
-                                                                    'error_read_packet_missing_cmd': {'code': 12,
+                                                                    'error_read_packet_missing_cmd': {'code': 8,
                                                                                                       'description': 'Received '
                                                                                                                      'a '
                                                                                                                      'packet '
@@ -121,7 +121,7 @@
                                                                                                                              'uint32'],
                                                                                                       'module': 'communication',
                                                                                                       'name': 'error_read_packet_missing_cmd'},
-                                                                    'error_read_packet_size_too_big': {'code': 10,
+                                                                    'error_read_packet_size_too_big': {'code': 6,
                                                                                                        'description': 'Received '
                                                                                                                       'a '
                                                                                                                       'packet '
@@ -134,7 +134,7 @@
                                                                                                                               'uint32'],
                                                                                                        'module': 'communication',
                                                                                                        'name': 'error_read_packet_size_too_big'},
-                                                                    'error_read_packet_size_too_small': {'code': 11,
+                                                                    'error_read_packet_size_too_small': {'code': 7,
                                                                                                          'description': 'Received '
                                                                                                                         'a '
                                                                                                                         'packet '
@@ -148,13 +148,13 @@
                                                                                                                                 'uint32'],
                                                                                                          'module': 'communication',
                                                                                                          'name': 'error_read_packet_size_too_small'},
-                                                                    'info_init_success': {'code': 1,
+                                                                    'info_init_success': {'code': 14,
                                                                                           'description': 'Initialization '
                                                                                                          'success',
                                                                                           'description_params': [],
                                                                                           'module': 'communication',
                                                                                           'name': 'info_init_success'},
-                                                                    'warn_garbage_data': {'code': 3,
+                                                                    'warn_garbage_data': {'code': 12,
                                                                                           'description': 'Read '
                                                                                                          'gargabe '
                                                                                                          'data '
@@ -163,7 +163,7 @@
                                                                                           'description_params': ['uintn'],
                                                                                           'module': 'communication',
                                                                                           'name': 'warn_garbage_data'},
-                                                                    'warn_received_invalid_packet_header': {'code': 2,
+                                                                    'warn_received_invalid_packet_header': {'code': 11,
                                                                                                             'description': 'Received '
                                                                                                                            'invalid '
                                                                                                                            'package '
@@ -172,7 +172,7 @@
                                                                                                             'description_params': ['packet'],
                                                                                                             'module': 'communication',
                                                                                                             'name': 'warn_received_invalid_packet_header'},
-                                                                    'warn_size_packet': {'code': 4,
+                                                                    'warn_size_packet': {'code': 13,
                                                                                          'description': 'Packet '
                                                                                                         'size '
                                                                                                         'exceeds '
